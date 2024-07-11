@@ -49,3 +49,18 @@ fun Route.deleteDriver(dataSource: DriverDataSource){
         }
     }
 }
+
+fun Route.updateDriver(dataSource: DriverDataSource){
+    post("update-driver"){
+        val driverRequest = call.receive<Driver>()
+        val newDriver = Driver(
+            driverRequest.name,driverRequest.titles,driverRequest.wins
+        )
+        val result = dataSource.updateDriver(newDriver)
+        if(result){
+            call.respond(HttpStatusCode.OK, newDriver)
+        }else{
+            call.respond(HttpStatusCode.InternalServerError, "Couldn't update driver")
+        }
+    }
+}
