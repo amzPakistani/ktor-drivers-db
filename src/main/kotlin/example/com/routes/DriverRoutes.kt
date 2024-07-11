@@ -2,7 +2,6 @@ package example.com.routes
 
 import example.com.data.DriverDataSource
 import example.com.data.model.Driver
-import example.com.data.requests.CreateDriverRequest
 import example.com.data.requests.DriverRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -24,7 +23,7 @@ fun Route.getDriver(dataSource: DriverDataSource){
 
 fun Route.createDriver(dataSource: DriverDataSource){
     post("create-driver"){
-        val driverRequest = call.receive<CreateDriverRequest>()
+        val driverRequest = call.receive<Driver>()
         val driver = Driver(
             name = driverRequest.name,
             titles = driverRequest.titles,
@@ -46,7 +45,7 @@ fun Route.deleteDriver(dataSource: DriverDataSource){
         if(deletedDriver){
             call.respond(HttpStatusCode.OK, "Driver '${driverRequest.name}' deleted successfully ")
         }else{
-            call.respond(HttpStatusCode.InternalServerError, "Couldn't create driver")
+            call.respond(HttpStatusCode.InternalServerError, "Couldn't delete driver")
         }
     }
 }
