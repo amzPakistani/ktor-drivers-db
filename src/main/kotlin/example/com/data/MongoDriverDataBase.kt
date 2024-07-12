@@ -5,6 +5,7 @@ import com.mongodb.client.model.Updates.set
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import example.com.data.model.Driver
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
 
 class MongoDriverDataBase(db: MongoDatabase) : DriverDataSource {
     private val drivers = db.getCollection("drivers", Driver::class.java)
@@ -32,5 +33,9 @@ class MongoDriverDataBase(db: MongoDatabase) : DriverDataSource {
             )
         )
         return updateResult.wasAcknowledged() && updateResult.modifiedCount > 0
+    }
+
+    override suspend fun getDrivers(): List<Driver> {
+        return drivers.find().toList()
     }
 }

@@ -7,4 +7,6 @@ interface DriverDataSource {
     suspend fun createDriver(driver: Driver):Boolean
     suspend fun deleteDriver(name: String):Boolean
     suspend fun updateDriver(driver: Driver):Boolean
+    suspend fun getDrivers():List<Driver>?
+
 }

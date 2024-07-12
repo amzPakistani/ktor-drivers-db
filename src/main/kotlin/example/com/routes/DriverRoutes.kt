@@ -21,6 +21,17 @@ fun Route.getDriver(dataSource: DriverDataSource){
     }
 }
 
+fun Route.getDrivers(dataSource: DriverDataSource){
+    get("get-drivers"){
+        val drivers = dataSource.getDrivers()
+        if(drivers==null){
+            call.respond(HttpStatusCode.NotFound, "Drivers are empty")
+        }else{
+            call.respond(HttpStatusCode.OK, drivers)
+        }
+    }
+}
+
 fun Route.createDriver(dataSource: DriverDataSource){
     post("create-driver"){
         val driverRequest = call.receive<Driver>()
