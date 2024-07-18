@@ -50,12 +50,16 @@ fun Route.createDriver(dataSource: DriverDataSource){
 }
 
 fun Route.deleteDriver(dataSource: DriverDataSource){
-    delete("delete-driver"){
-        val driverRequest = call.receive<DriverRequest>()
-        val deletedDriver = dataSource.deleteDriver(driverRequest.name)
-        if(deletedDriver){
-            call.respond(HttpStatusCode.OK, "Driver '${driverRequest.name}' deleted successfully ")
-        }else{
+    delete("delete-driver") {
+        val name = call.parameters["name"]
+        if (name == null) {
+            call.respond(HttpStatusCode.BadRequest, "Missing driver name")
+            return@delete
+        }
+        val deletedDriver = dataSource.deleteDriver(name)
+        if (deletedDriver) {
+            call.respond(HttpStatusCode.OK, "Driver '$name' deleted successfully")
+        } else {
             call.respond(HttpStatusCode.InternalServerError, "Couldn't delete driver")
         }
     }
